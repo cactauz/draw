@@ -97,7 +97,7 @@ var (
 
 func drawShape(canvas *image.RGBA, points []*point) {
 	gc := draw2dimg.NewGraphicContext(canvas)
-	gc.SetStrokeColor(color.RGBA{0, 0, 0, 0xff})
+	gc.SetStrokeColor(color.RGBA{0xff, 0xff, 0xff, 0xff})
 	gc.SetLineWidth(5)
 
 	gc.MoveTo(points[0].x, points[0].y)
@@ -108,6 +108,7 @@ func drawShape(canvas *image.RGBA, points []*point) {
 
 	gc.Close()
 
+	// cornflower blue best color
 	gc.SetFillColor(color.RGBA{0x54, 0x95, 0xed, 0xff})
 	gc.FillStroke()
 
@@ -131,7 +132,7 @@ func labelPoints(canvas *image.RGBA, points []*point) {
 	gc := draw2dimg.NewGraphicContext(canvas)
 	gc.SetFontData(draw2d.FontData{Name: "helvetica"})
 	gc.SetFontSize(32)
-	gc.SetFillColor(color.RGBA{0xff, 0xff, 0, 0xff})
+	gc.SetFillColor(color.RGBA{0xff, 0xff, 0xff, 0xff})
 
 	for i, p := range points {
 		x := 0.0
@@ -147,6 +148,10 @@ func labelPoints(canvas *image.RGBA, points []*point) {
 
 func main() {
 	canvas := image.NewRGBA(image.Rect(0, 0, x, y))
+	gc := draw2dimg.NewGraphicContext(canvas)
+
+	gc.SetFillColor(color.RGBA{0x22, 0x22, 0x22, 0xff})
+	gc.ClearRect(0, 0, x, y)
 
 	points := generatePoints(n, float64(x), float64(y))
 
