@@ -29,26 +29,34 @@ func newPoint(x, y float64) *point {
 }
 
 func (p *point) String() string {
-	return fmt.Sprintf("[%v, %v]", p.x, p.y)
+	return fmt.Sprintf("(%v, %v)", p.x, p.y)
 }
 
 // x and y are the boundaries of the shape
 func generatePoints(numSegments int, x, y float64) []*point {
-	points := make([]*point, 0)
+	points := make([]*point, 2)
 
 	bucketSize := x / float64(numSegments)
 
-	for i := 0; i < numSegments; i++ {
-		rndX := float64(i)*bucketSize + bucketSize*rand.Float64()
-		rndY := y - (2.0/3.0)*y*rand.Float64() - y/3
-		points = append(points, newPoint(rndX, rndY))
+	rndY := func() float64 {
+		return (.4)*y*rand.Float64() + y*.3
 	}
 
-	begin := newPoint(points[0].x, y)
-	end := newPoint(points[len(points)-1].x, y)
+	points[0] = newPoint(0, y)
+	points[1] = newPoint(0, rndY())
+	for i := 0; i < numSegments; i++ {
+		var x float64
+		for x < (.2)*bucketSize+points[i+1].x {
+			x = float64(i)*bucketSize + bucketSize*rand.Float64()
+		}
 
-	points = append([]*point{begin}, points...)
-	points = append(points, end)
+		points = append(points, newPoint(x, rndY()))
+	}
+
+	penult := newPoint(x, rndY())
+	end := newPoint(x, y)
+
+	points = append(points, penult, end)
 	return points
 }
 
@@ -82,8 +90,8 @@ func convertToTriangles(points []*point, x, y float64) []*triangle {
 }
 
 var (
-	x = 4000
-	y = 1000
+	x = 2436
+	y = 1125
 	n = 15
 )
 
